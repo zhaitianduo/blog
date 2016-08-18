@@ -1,0 +1,52 @@
+Golang 数组和切片
+
+数组是值类型，将一个数组赋值给另一个数组时，传递的是一份拷贝。
+切片是引用类型，切片包装的数组称为该切片的底层数组。
+
+看代码：
+
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	//a是一个数组，注意数组是一个固定长度的，初始化时候必须要指定长度，不指定长度的话就是切片了
+	a := [3]int{1, 2, 3}
+	//b是数组，是a的一份拷贝
+	b := a
+	//c是切片，是引用类型，底层数组是a
+	c := a[:]
+	for i := 0; i < len(a); i++ {
+		a[i] = a[i] + 1
+	}
+	//改变a的值后，b是a的拷贝，b不变，c是引用，c的值改变
+	fmt.Println(a) //[2,3,4]
+	fmt.Println(b) //[1 2 3]
+	fmt.Println(c) //[2,3,4]
+	
+	//m1是切片，引用类型
+	m1 := []int{1, 2, 3}
+	m2 := m1
+	for i := 0; i < len(a); i++ {
+		m1[i] = m1[i] + 1
+	}
+
+	fmt.Println(m1) //[2,3,4]
+	fmt.Println(m2) //[2,3,4]
+
+	//make只用于map，slice和channel,所以下面这句话生成一个slice，是一个引用类型
+	s1 := make([]int, 0, 3)
+
+	for i := 0; i < cap(s1); i++ {
+		s1 = append(s1, i)
+	}
+	s2 := s1
+	for i := 0; i < len(a); i++ {
+		s1[i] = s1[i] + 1
+	}
+
+	fmt.Println(s1)  //[1 2 3]
+	fmt.Println(s2)  //[1 2 3]
+}
